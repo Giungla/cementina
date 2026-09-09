@@ -1,0 +1,37 @@
+{
+  "name": "cementina",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Build dos arquivos do site de Cementina",
+  "scripts": {
+    "vite-build-spp-dev": "node build-commands/vite-build-dev.js --name=single-product-page",
+    "vite-build-spp-prod": "node build-commands/vite-build-prod.js --name=single-product-page",
+
+    "vite-build-checkout-dev": "node build-commands/vite-build-dev.js --name=checkout",
+    "vite-build-checkout-prod": "node build-commands/vite-build-prod.js --name=checkout",
+
+    "vite-build-floating-cart-dev": "node build-commands/vite-build-dev.js --name=floating-cart",
+    "vite-build-floating-cart-prod": "node build-commands/vite-build-prod.js --name=floating-cart"
+  },
+  "dependencies": {
+    "@square/web-sdk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "terser": "^5.50.0",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1",
+    "vue": "^3.5.41"
+  },
+  "engines": {
+    "node": "22.17.0",
+    "npm": "10.9.2",
+    "yarn": "1.22.22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Giungla/cementina.git"
+  },
+  "private": true
+}
