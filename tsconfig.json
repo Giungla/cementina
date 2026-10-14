@@ -3,7 +3,8 @@
     "lib": [
       "es2024",
       "DOM",
-      "DOM.Iterable"
+      "DOM.Iterable",
+      "esnext.disposable"
     ],
     "target": "es2022",
     "module": "commonjs",

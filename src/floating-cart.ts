@@ -95,6 +95,9 @@ const state = new Proxy(_state, {
       case 'cart':
         renderCart()
         renderFinalPrices()
+        dispatchCementinaCartItemsChange({
+          cart_items: target.cart?.cart_items ?? 0,
+        })
         break
       case 'isCartOpened':
         {

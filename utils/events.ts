@@ -17,6 +17,10 @@ import {
   EMPTY_OBJECT,
 } from './consts'
 
+export const INPUT_EVENT = new Event('input')
+
+export const BLUR_EVENT = new Event('blur')
+
 function dispatchEvent (event: CustomEvent): boolean {
   return window.dispatchEvent(event)
 }
