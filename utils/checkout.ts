@@ -24,7 +24,7 @@ export const CHECKOUT_ENDPOINTS = {
   creditdebitcard: 'card',
   googlepay: 'googlepay',
   applepay: 'applepay',
-}
+} as const
 
 export function validateOutcomingData <T extends unknown> (value: unknown): value is T {
   return value !== NULL_VALUE
@@ -32,7 +32,7 @@ export function validateOutcomingData <T extends unknown> (value: unknown): valu
 
 export function outcomingDataError (message: string) {
   return {
-    failed: true,
+    failed: true as const,
     message: message,
   }
 }
@@ -40,7 +40,7 @@ export function outcomingDataError (message: string) {
 export function outcomingDataSuccess (payload: FinalCheckoutPay) {
   return {
     payload,
-    failed: false,
+    failed: false as const,
   }
 }
 
@@ -51,5 +51,7 @@ export function isDeliveryPlaceValid (deliveryPlace: any): deliveryPlace is Deli
 }
 
 export function paymentTypeEndpoint (paymentType: PaymentTypes) {
-
+  return CHECKOUT_ENDPOINTS[paymentType]
 }
+
+export type PaymentEndpoints = ReturnType<typeof paymentTypeEndpoint>;

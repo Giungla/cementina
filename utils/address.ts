@@ -4,7 +4,6 @@ import {
 } from '../types/checkout'
 
 import {
-  type ShippoAddress,
   type ShippoAddressInput,
 } from '../types/address'
 
@@ -12,10 +11,23 @@ import {
   join,
   replaceDuplicatedSpaces,
 } from './dom'
-import {DeliveryType, deliveryType, DeliveryTypes} from "../types/delivery";
-import {CheckoutAddresses, ValidatableShippoAddress} from "../types/checkout.definition";
-import {EMPTY_STRING, NULL_VALUE} from "./consts";
-import {Nullable} from "../types/global";
+
+import {
+  deliveryType,
+  type DeliveryTypes,
+} from '../types/delivery'
+
+import {
+  type CheckoutAddresses,
+} from '../types/checkout.definition'
+
+import {
+  NULL_VALUE,
+} from './consts'
+
+import {
+  type Nullable,
+} from '../types/global'
 
 export const statesAcronym = [
   "AL", // Alabama

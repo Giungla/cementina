@@ -194,8 +194,10 @@ import {
 
 import {
   type PaymentPayload,
-  isDeliveryPlaceValid,
+  type PaymentEndpoints,
   outcomingDataError,
+  paymentTypeEndpoint,
+  isDeliveryPlaceValid,
   outcomingDataSuccess,
 } from '../utils/checkout'
 
@@ -1112,7 +1114,7 @@ const CheckoutComponent = defineComponent({
         selectedPaymentMethod,
       } = this
 
-      if (isSubmitting) return
+      if (isSubmitting || !selectedPaymentMethod) return
 
       this.triggerValidations()
 
@@ -1172,20 +1174,58 @@ const CheckoutComponent = defineComponent({
       //     console.log(this.paymentPayload)
       // }
 
-      this.orderError = 'Mensagem de erro'
+      const response = await this.postPayment(paymentTypeEndpoint(selectedPaymentMethod))
+
+      if (!response.succeeded) {
+        this.orderError = response.message || 'Unable to complete your order. Please, try again later'
+
+        return
+      }
+
+      console.log('payment complete')
+      console.log(response.data)
     },
 
     /**
      * Envia a solicitação de pagamento
      */
-    // async postPayment (paymentType: payme): Promise<void> {
-    //   const defaultErrorMessage = 'Não foi possível finalizar o seu pedido'
-    //
-    //   try {
-    //     const response = await fetch(`${XANO_BASE_URL}/api:aQp-dj9m/pay/checkout/card/guest`)
-    //   } catch (e) {
-    //   }
-    // },
+    async postPayment <T extends void> (paymentType: PaymentEndpoints): Promise<ResponsePattern<T>> {
+      const defaultErrorMessage = 'Não foi possível finalizar o seu pedido'
+
+      const {
+        paymentPayload,
+      } = this
+
+      if (paymentPayload.failed) {
+        return postErrorResponse(paymentPayload.message)
+      }
+
+      try {
+        const cartPath = getCartHandlerPath()
+
+        const response = await fetch(`${XANO_BASE_URL}/api:aQp-dj9m/pay/checkout/${paymentType}/${cartPath}`, {
+          ...buildRequestOptions([], HttpMethod.POST),
+          priority: 'high',
+          body: stringify(paymentPayload.payload),
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+
+          return postErrorResponse.call<
+            Response, [string], FunctionErrorPattern
+          >(response, error?.message ?? defaultErrorMessage)
+        }
+
+        const data: T = await response.json()
+
+        return postSuccessResponse.call<
+          Response, [T], FunctionSucceededPattern<T>
+        >(response, data)
+      } catch (e) {
+        return postErrorResponse(defaultErrorMessage)
+      }
+    },
 
     /**
      * Realiza a validação e registro do endereço de cobrança
